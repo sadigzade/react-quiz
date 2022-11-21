@@ -6,8 +6,10 @@ import classes from './Quiz.module.scss';
 
 class Quiz extends Component {
   state = {
+    activeQuestion: 0,
     quiz: [
       {
+        id: 1,
         question: 'Какого цвета небо?',
         answers: [
           { id: 1, text: 'Чёрный' },
@@ -17,11 +19,24 @@ class Quiz extends Component {
         ],
         rightAnswerId: 2,
       },
+      {
+        id: 2,
+        question: 'В каком году основал Санкт-Петербург?',
+        answers: [
+          { id: 1, text: '1700' },
+          { id: 2, text: '1702' },
+          { id: 3, text: '1703' },
+          { id: 4, text: '1803' },
+        ],
+        rightAnswerId: 3,
+      },
     ],
   };
 
   handlerAnswerClick = (answerId) => {
-    console.log('Answer Id:', answerId);
+    this.setState({
+      activeQuestion: this.state.activeQuestion + 1,
+    });
   };
 
   render() {
@@ -31,9 +46,11 @@ class Quiz extends Component {
           <h1>Ответье на все вопросы</h1>
 
           <ActiveQuiz
-            question={this.state.quiz[0].question}
-            answers={this.state.quiz[0].answers}
+            question={this.state.quiz[this.state.activeQuestion].question}
+            answers={this.state.quiz[this.state.activeQuestion].answers}
             onAnswerClick={this.handlerAnswerClick}
+            quizLength={this.state.quiz.length}
+            answerNumber={this.state.activeQuestion + 1}
           />
         </div>
       </div>
