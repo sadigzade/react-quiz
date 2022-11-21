@@ -7,6 +7,7 @@ import classes from './Quiz.module.scss';
 class Quiz extends Component {
   state = {
     activeQuestion: 0,
+    answerState: null,
     quiz: [
       {
         id: 1,
@@ -34,9 +35,30 @@ class Quiz extends Component {
   };
 
   handlerAnswerClick = (answerId) => {
-    this.setState({
-      activeQuestion: this.state.activeQuestion + 1,
-    });
+    const quiz = this.state.quiz[this.state.activeQuestion];
+
+    if (answerId === quiz.rightAnswerId) {
+      this.setState({ answerState: { [answerId]: 'success' } });
+
+      const timer = window.setTimeout(() => {
+        if (this.isFinishedQuiz()) {
+          console.log('Finish');
+        } else {
+          this.setState({
+            activeQuestion: this.state.activeQuestion + 1,
+            answerState: null,
+          });
+        }
+
+        window.clearTimeout(timer);
+      }, 1000);
+    } else {
+      this.setState({ answerState: { [answerId]: 'error' } });
+    }
+  };
+
+  isFinishedQuiz = () => {
+    return this.state.activeQuestion + 1 === this.state.quiz.length;
   };
 
   render() {
@@ -51,6 +73,7 @@ class Quiz extends Component {
             onAnswerClick={this.handlerAnswerClick}
             quizLength={this.state.quiz.length}
             answerNumber={this.state.activeQuestion + 1}
+            state={this.state.answerState}
           />
         </div>
       </div>

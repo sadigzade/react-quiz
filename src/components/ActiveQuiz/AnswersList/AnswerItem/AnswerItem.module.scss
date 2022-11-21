@@ -9,4 +9,12 @@
   &:hover {
     background: rgba(255, 255, 255, 0.2);
   }
+
+  &.success {
+    background: rgba(161, 240, 69, 0.7);
+  }
+
+  &.error {
+    background: rgba(240, 87, 108, 0.7);
+  }
 }
