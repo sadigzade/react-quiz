@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../UI/Button/Button';
 
 import classes from './FinishedQuiz.module.scss';
 
@@ -36,9 +37,10 @@ const FinishedQuiz = (props) => {
       </p>
 
       <div>
-        <button className={classes.btn} onClick={props.onRetry}>
+        <Button onClick={props.onRetry} type="primary">
           Повторить
-        </button>
+        </Button>
+        <Button type="success">Перейти в список тестов</Button>
       </div>
     </div>
   );
