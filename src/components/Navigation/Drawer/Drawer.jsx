@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+
+import Backdrop from '../../UI/Backdrop/Backdrop';
 
 import classes from './Drawer.module.scss';
 
@@ -21,9 +23,12 @@ class Drawer extends Component {
     }
 
     return (
-      <nav className={cls.join(' ')}>
-        <ul>{this.renderLinks()}</ul>
-      </nav>
+      <Fragment>
+        {this.props.isOpen && <Backdrop onClick={this.props.onClose} />}
+        <nav className={cls.join(' ')}>
+          <ul>{this.renderLinks()}</ul>
+        </nav>
+      </Fragment>
     );
   }
 }
