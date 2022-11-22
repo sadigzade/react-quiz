@@ -20,6 +20,21 @@
     }
   }
 
+  .btn {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background: #fff;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+
+    &:hover {
+      background: #5041b2;
+      color: #fff;
+    }
+  }
+
   .success {
     color: rgba(161, 240, 69, 0.7);
   }

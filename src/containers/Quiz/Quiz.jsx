@@ -7,8 +7,9 @@ import classes from './Quiz.module.scss';
 
 class Quiz extends Component {
   state = {
-    isFinished: true,
     activeQuestion: 0,
+    isFinished: false,
+    results: {},
     answerState: null,
     quiz: [
       {
@@ -45,10 +46,18 @@ class Quiz extends Component {
       }
     }
 
-    const quiz = this.state.quiz[this.state.activeQuestion];
+    const question = this.state.quiz[this.state.activeQuestion];
+    const results = this.state.results;
 
-    if (answerId === quiz.rightAnswerId) {
-      this.setState({ answerState: { [answerId]: 'success' } });
+    if (answerId === question.rightAnswerId) {
+      if (!results[question.id]) {
+        results[question.id] = 'success';
+      }
+
+      this.setState({
+        answerState: { [answerId]: 'success' },
+        results,
+      });
 
       const timer = window.setTimeout(() => {
         if (this.isFinishedQuiz()) {
@@ -65,12 +74,26 @@ class Quiz extends Component {
         window.clearTimeout(timer);
       }, 1000);
     } else {
-      this.setState({ answerState: { [answerId]: 'error' } });
+      results[question.id] = 'error';
+
+      this.setState({
+        answerState: { [answerId]: 'error' },
+        results,
+      });
     }
   };
 
   isFinishedQuiz = () => {
     return this.state.activeQuestion + 1 === this.state.quiz.length;
+  };
+
+  handlerRetry = () => {
+    this.setState({
+      activeQuestion: 0,
+      isFinished: false,
+      results: {},
+      answerState: null,
+    });
   };
 
   render() {
@@ -79,7 +102,11 @@ class Quiz extends Component {
         <div className={classes.QuizWrapper}>
           <h1>Ответье на все вопросы</h1>
           {this.state.isFinished ? (
-            <FinishedQuiz />
+            <FinishedQuiz
+              results={this.state.results}
+              quiz={this.state.quiz}
+              onRetry={this.handlerRetry}
+            />
           ) : (
             <ActiveQuiz
               question={this.state.quiz[this.state.activeQuestion].question}
