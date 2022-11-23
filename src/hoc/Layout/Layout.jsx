@@ -10,13 +10,13 @@ class Layout extends Component {
     menu: false,
   };
 
-  handlerToggleMenu = () => {
+  handleToggleMenu = () => {
     this.setState({
       menu: !this.state.menu,
     });
   };
 
-  handlerMenuClose = () => {
+  handleMenuClose = () => {
     this.setState({
       menu: false,
     });
@@ -25,8 +25,8 @@ class Layout extends Component {
   render() {
     return (
       <div className={classes.Layout}>
-        <Drawer isOpen={this.state.menu} onClose={this.handlerMenuClose} />
-        <MenuToggle onToggle={this.handlerToggleMenu} isOpen={this.state.menu} />
+        <Drawer isOpen={this.state.menu} onClose={this.handleMenuClose} />
+        <MenuToggle onToggle={this.handleToggleMenu} isOpen={this.state.menu} />
         <main>{this.props.children}</main>
       </div>
     );

@@ -37,7 +37,7 @@ class Quiz extends Component {
     ],
   };
 
-  handlerAnswerClick = (answerId) => {
+  handleAnswerClick = (answerId) => {
     if (this.state.answerState) {
       const key = Object.keys(this.state.answerState)[0];
 
@@ -87,7 +87,7 @@ class Quiz extends Component {
     return this.state.activeQuestion + 1 === this.state.quiz.length;
   };
 
-  handlerRetry = () => {
+  handleRetry = () => {
     this.setState({
       activeQuestion: 0,
       isFinished: false,
@@ -105,13 +105,13 @@ class Quiz extends Component {
             <FinishedQuiz
               results={this.state.results}
               quiz={this.state.quiz}
-              onRetry={this.handlerRetry}
+              onRetry={this.handleRetry}
             />
           ) : (
             <ActiveQuiz
               question={this.state.quiz[this.state.activeQuestion].question}
               answers={this.state.quiz[this.state.activeQuestion].answers}
-              onAnswerClick={this.handlerAnswerClick}
+              onAnswerClick={this.handleAnswerClick}
               quizLength={this.state.quiz.length}
               answerNumber={this.state.activeQuestion + 1}
               state={this.state.answerState}
