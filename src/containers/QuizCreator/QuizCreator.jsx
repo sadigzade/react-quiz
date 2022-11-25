@@ -5,7 +5,7 @@ import Input from '../../components/UI/Input/Input';
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Select from '../../components/UI/Select/Select';
 
-import { createControl } from '../../form/formFramework';
+import { createControl, validate, validateForm } from '../../form/formFramework';
 
 import classes from './QuizCreator.module.scss';
 
@@ -43,19 +43,36 @@ function createFormControls() {
 class QuizCreator extends Component {
   state = {
     quiz: [],
+    isFormValid: false,
     rightAnswerId: 1,
     formControls: createFormControls(),
   };
 
-  onSubmitHandler = (e) => {
-    e.preventDefault();
+  onSubmitHandler = (event) => {
+    event.preventDefault();
   };
 
-  handleAddQuestion = () => {};
+  handleAddQuestion = (event) => {
+    event.preventDefault();
+  };
 
   handleCreateQuiz = () => {};
 
-  handleChange = (value, controlName) => {};
+  handleChange = (value, controlName) => {
+    const formControls = { ...this.state.formControls };
+    const control = { ...formControls[controlName] };
+
+    control.touched = true;
+    control.value = value;
+    control.valid = validate(control.value, control.validation);
+
+    formControls[controlName] = control;
+
+    this.setState({
+      isFormValid: validateForm(formControls),
+      formControls,
+    });
+  };
 
   renderControls = () => {
     return Object.keys(this.state.formControls).map((controlName, index) => {
@@ -109,10 +126,16 @@ class QuizCreator extends Component {
 
             {select}
 
-            <Button type="primary" onClick={this.handleAddQuestion}>
+            <Button
+              type="primary"
+              onClick={this.handleAddQuestion}
+              disabled={!this.state.isFormValid}>
               Добавить вопрос
             </Button>
-            <Button type="success" onClick={this.handleCreateQuiz}>
+            <Button
+              type="success"
+              onClick={this.handleCreateQuiz}
+              disabled={this.state.quiz.length === 0}>
               Создать тест
             </Button>
           </form>
