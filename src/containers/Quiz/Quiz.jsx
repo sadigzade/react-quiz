@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+import axios from '../../axios/axios-qioz';
+import { useParams } from 'react-router-dom';
 
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
+import Loader from '../../components/UI/Loader/Loader';
 
 import classes from './Quiz.module.scss';
+
+function withParams(Component) {
+  return (props) => <Component {...props} params={useParams()} />;
+}
 
 class Quiz extends Component {
   state = {
@@ -11,30 +18,8 @@ class Quiz extends Component {
     isFinished: false,
     results: {},
     answerState: null,
-    quiz: [
-      {
-        id: 1,
-        question: 'Какого цвета небо?',
-        answers: [
-          { id: 1, text: 'Чёрный' },
-          { id: 2, text: 'Синий' },
-          { id: 3, text: 'Красный' },
-          { id: 4, text: 'Зелёный' },
-        ],
-        rightAnswerId: 2,
-      },
-      {
-        id: 2,
-        question: 'В каком году основал Санкт-Петербург?',
-        answers: [
-          { id: 1, text: '1700' },
-          { id: 2, text: '1702' },
-          { id: 3, text: '1703' },
-          { id: 4, text: '1803' },
-        ],
-        rightAnswerId: 3,
-      },
-    ],
+    quiz: [],
+    loading: true,
   };
 
   handleAnswerClick = (answerId) => {
@@ -96,12 +81,25 @@ class Quiz extends Component {
     });
   };
 
+  async componentDidMount() {
+    try {
+      const response = await axios.get(`/quizes/${this.props.params.id}.json`);
+      const quiz = response.data;
+
+      this.setState({ quiz, loading: false });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
     return (
       <div className={classes.Quiz}>
         <div className={classes.QuizWrapper}>
           <h1>Ответье на все вопросы</h1>
-          {this.state.isFinished ? (
+          {this.state.loading ? (
+            <Loader />
+          ) : this.state.isFinished ? (
             <FinishedQuiz
               results={this.state.results}
               quiz={this.state.quiz}
@@ -123,4 +121,4 @@ class Quiz extends Component {
   }
 }
 
-export default Quiz;
+export default withParams(Quiz);
