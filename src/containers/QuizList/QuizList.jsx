@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 import classes from './QuizList.module.scss';
 
@@ -13,6 +14,12 @@ class QuizList extends Component {
       );
     });
   };
+
+  componentDidMount() {
+    axios
+      .get('https://react-quiz-e615d-default-rtdb.firebaseio.com/quiz.json')
+      .then((res) => console.log(res));
+  }
 
   render() {
     return (
