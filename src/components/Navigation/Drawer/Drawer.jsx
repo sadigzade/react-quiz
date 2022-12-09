@@ -5,18 +5,12 @@ import Backdrop from '../../UI/Backdrop/Backdrop';
 
 import classes from './Drawer.module.scss';
 
-const links = [
-  { to: '/', label: 'Список' },
-  { to: '/auth', label: 'Авторизация' },
-  { to: '/quiz-creator', label: 'Создать тест' },
-];
-
 class Drawer extends Component {
   handleClick = () => {
     this.props.onClose();
   };
 
-  renderLinks() {
+  renderLinks(links) {
     const activeStyle = {
       opacity: 0.7,
     };
@@ -41,11 +35,20 @@ class Drawer extends Component {
       cls.push(classes.close);
     }
 
+    const links = [{ to: '/', label: 'Список' }];
+
+    if (this.props.isAuthenticated) {
+      links.push({ to: '/quiz-creator', label: 'Создать тест' });
+      links.push({ to: '/logout', label: 'Выйти' });
+    } else {
+      links.push({ to: '/auth', label: 'Авторизация' });
+    }
+
     return (
       <Fragment>
         {this.props.isOpen && <Backdrop onClick={this.props.onClose} />}
         <nav className={cls.join(' ')}>
-          <ul>{this.renderLinks()}</ul>
+          <ul>{this.renderLinks(links)}</ul>
         </nav>
       </Fragment>
     );
